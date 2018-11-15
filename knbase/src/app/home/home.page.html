@@ -12,30 +12,22 @@
     <ion-input required type="text" placeholder="Please input" [(ngModel)]="question"></ion-input>
   </ion-item>
 
-  <ion-button (click)="getAnswer();">Get Answer</ion-button>
+  <ion-button expand="full" (click)="getAnswer();">Get Answer</ion-button>
+  <ion-label color="primary">Or</ion-label>
+  <ion-button expand="full" (click)="getAnswer();">Hold to record voice question and release to get answer</ion-button>
 
-  <ion-list>
-    <ion-item>
+  <ion-list *ngIf="answerList || answerGot">
+    <ion-item *ngFor="let answer of answerList">
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Answer Title 1</ion-card-title>
+          <ion-card-title>{{answer.title}}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <p>The content for this answer</p>
+          <p>{{answer.content}}</p>
         </ion-card-content>
       </ion-card>
     </ion-item>
 
-    <ion-item>
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>Answer Title 2</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>The content for this answer</p>
-        </ion-card-content>
-      </ion-card>
-    </ion-item>
   </ion-list>
 
 </ion-content>
