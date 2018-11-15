@@ -9,16 +9,27 @@
 
   <ion-item>
     <ion-label color="primary">Question</ion-label>
-    <ion-input required type="text" placeholder="Please input"></ion-input>
+    <ion-input required type="text" placeholder="Please input" [(ngModel)]="question"></ion-input>
   </ion-item>
 
-  <ion-button>Get Answer</ion-button>
+  <ion-button (click)="getAnswer();">Get Answer</ion-button>
 
   <ion-list>
     <ion-item>
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Answer Title</ion-card-title>
+          <ion-card-title>Answer Title 1</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>The content for this answer</p>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+
+    <ion-item>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Answer Title 2</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <p>The content for this answer</p>
