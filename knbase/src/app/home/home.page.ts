@@ -23,6 +23,7 @@ export class HomePage {
   answerList: Answer[];
   answerGot: boolean;
   apiRoot = 'http://13.75.68.6:5000/api/v1/getSimilarity';
+  similarityResult: string;
 
   constructor(public toastController: ToastController, private http: Http, private httpClient: HttpClient) { }
 
@@ -52,6 +53,7 @@ export class HomePage {
       headers: headers
     }).subscribe(data => {
       console.log(data);
+      this.similarityResult = JSON.stringify(data);
     }, (error) => {
     });
   }

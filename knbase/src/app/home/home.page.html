@@ -13,6 +13,12 @@
   </ion-item>
 
   <ion-button expand="full" (click)="getSimilarity(question);">Get Similarity</ion-button>
+
+  <div *ngIf="similarityResult">
+    <ion-label color="primary">Similarity Result</ion-label>
+    <ion-label>{{similarityResult}}</ion-label>
+  </div>
+
   <ion-button expand="full" (click)="getAnswer();">Get Answer</ion-button>
   <ion-label color="primary">Or</ion-label>
   <ion-button expand="full" (click)="getAnswer();">Hold to record voice question and release to get answer</ion-button>
