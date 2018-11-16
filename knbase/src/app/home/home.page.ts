@@ -6,6 +6,9 @@ import { MediaCapture, MediaFile, CaptureError, CaptureVideoOptions } from '@ion
 import { Storage } from '@ionic/storage';
 import { Media, MediaObject } from '@ionic-native/media';
 import { File } from '@ionic-native/file';
+import { Http } from '@angular/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs-compat/Observable';
 
 const MEDIA_FILES_KEY = 'mediaFiles';
 
@@ -19,14 +22,9 @@ export class HomePage {
   question: string;
   answerList: Answer[];
   answerGot: boolean;
+  apiRoot = 'http://13.75.68.6:5000/api/v1/getSimilarity';
 
-
-  mediaFiles = [];
-  @ViewChild('myvideo') myVideo: any;
-
-
-  constructor(public toastController: ToastController,
-    private mediaCapture: MediaCapture, private storage: Storage, private file: File, private media: Media) { }
+  constructor(public toastController: ToastController, private http: Http, private httpClient: HttpClient) { }
 
   getAnswer() {
     if (this.question) {
@@ -40,6 +38,47 @@ export class HomePage {
     }
   }
 
+  getSimilarity(question: string) {
+
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+
+    const requestOptions = {
+      params: new HttpParams().set('ques', question),
+      // headers: new HttpHeaders(headers)
+    };
+    this.httpClient.get(`${this.apiRoot}`, {
+      params: new HttpParams().set('ques', question),
+      headers: headers
+    }).subscribe(data => {
+      console.log(data);
+    }, (error) => {
+    });
+  }
+
+  getSimilarity2(question: string) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const params = new HttpParams().set('ques', question);
+    this.http.get(this.apiRoot, { search: params });
+    // return this.http.get(question);
+    // const promise = new Promise((resolve, reject) => {
+    //   const apiURL = `${this.apiRoot}?ques=${question}`;
+    //   this.httpClient.get(apiURL)
+    //     .toPromise()
+    //     .then(
+    //       res => { // Success
+    //         console.log(res);
+    //         resolve();
+    //       },
+    //       msg => { // Error
+    //         reject(msg);
+    //       }
+    //     );
+    // });
+    // return promise;
+  }
+
   async presentToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -48,28 +87,28 @@ export class HomePage {
     toast.present();
   }
 
-  ionViewDidLoad() {
-    this.storage.get(MEDIA_FILES_KEY).then(res => {
-      this.mediaFiles = JSON.parse(res) || [];
-    });
-  }
+  // ionViewDidLoad() {
+  //   this.storage.get(MEDIA_FILES_KEY).then(res => {
+  //     this.mediaFiles = JSON.parse(res) || [];
+  //   });
+  // }
 
-  captureAudio() {
-    this.mediaCapture.captureAudio().then(res => {
-      this.storeMediaFiles(res);
-    }, (err: CaptureError) => console.error(err));
-  }
+  // captureAudio() {
+  //   this.mediaCapture.captureAudio().then(res => {
+  //     this.storeMediaFiles(res);
+  //   }, (err: CaptureError) => console.error(err));
+  // }
 
-  storeMediaFiles(files) {
-    this.storage.get(MEDIA_FILES_KEY).then(res => {
-      if (res) {
-        let arr = JSON.parse(res);
-        arr = arr.concat(files);
-        this.storage.set(MEDIA_FILES_KEY, JSON.stringify(arr));
-      } else {
-        this.storage.set(MEDIA_FILES_KEY, JSON.stringify(files));
-      }
-      this.mediaFiles = this.mediaFiles.concat(files);
-    });
-  }
+  // storeMediaFiles(files) {
+  //   this.storage.get(MEDIA_FILES_KEY).then(res => {
+  //     if (res) {
+  //       let arr = JSON.parse(res);
+  //       arr = arr.concat(files);
+  //       this.storage.set(MEDIA_FILES_KEY, JSON.stringify(arr));
+  //     } else {
+  //       this.storage.set(MEDIA_FILES_KEY, JSON.stringify(files));
+  //     }
+  //     this.mediaFiles = this.mediaFiles.concat(files);
+  //   });
+  // }
 }
