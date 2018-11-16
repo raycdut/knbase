@@ -14,7 +14,14 @@
 
   <ion-button expand="full" (click)="getAnswer();">Get Answer</ion-button>
   <ion-label color="primary">Or</ion-label>
-  <ion-button expand="full" (click)="getAnswer();">Hold to record voice question and release to get answer</ion-button>
+  <ion-button expand="full" (click)="captureAudio();">Hold to record voice question and release to get answer</ion-button>
+
+  <ion-list>
+    <ion-item *ngFor="let file of mediaFiles" tappable text-wrap>
+      {{ file.name }}
+      <p>{{ file.size / 1000 / 1000 | number }} MB</p>
+    </ion-item>
+  </ion-list>
 
   <ion-list *ngIf="answerList || answerGot">
     <ion-item *ngFor="let answer of answerList">
@@ -29,5 +36,7 @@
     </ion-item>
 
   </ion-list>
+
+
 
 </ion-content>

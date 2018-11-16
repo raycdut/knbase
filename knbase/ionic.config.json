@@ -1,5 +1,7 @@
 {
   "name": "knbase",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
