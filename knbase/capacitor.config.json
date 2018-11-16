@@ -1,0 +1,6 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "knbase",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}
