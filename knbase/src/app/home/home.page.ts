@@ -9,6 +9,7 @@ import { File } from '@ionic-native/file';
 import { Http } from '@angular/http';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs-compat/Observable';
+import { Constants } from '../model/constants';
 
 const MEDIA_FILES_KEY = 'mediaFiles';
 
@@ -23,16 +24,18 @@ export class HomePage {
   answerList: Answer[];
   answerGot: boolean;
   apiRoot = 'http://13.75.68.6:5000/api/v1/getSimilarity';
+  similarity: number[];
   similarityResult: string;
 
   constructor(public toastController: ToastController, private http: Http, private httpClient: HttpClient) { }
 
   getAnswer() {
     if (this.question) {
-      this.presentToast('Test: ' + this.question);
+      this.presentToast('Get answer for: ' + this.question);
       this.answerGot = true;
       if (!this.answerList) {
-        this.answerList = [{ title: 'Test', content: 'Test content' }];
+        const i: number = this.similarity.indexOf(Math.max(...this.similarity));
+        this.answerList = [{ title: 'Answer', content: this.getAnswerById(i) }];
       }
     } else {
       this.presentToast('Please input the question.');
@@ -41,6 +44,7 @@ export class HomePage {
 
   getSimilarity(question: string) {
 
+    this.presentToast('Get similarity for: ' + this.question);
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
 
@@ -53,32 +57,27 @@ export class HomePage {
       headers: headers
     }).subscribe(data => {
       console.log(data);
+      this.similarity = JSON.parse(JSON.stringify(data));
       this.similarityResult = JSON.stringify(data);
     }, (error) => {
+      console.log('Error');
+      // this.similarityResult = Constants.ANSWERS[0];
+      this.answerList = [{ title: 'Answer', content: this.getAnswerById(1) }];
     });
   }
 
-  getSimilarity2(question: string) {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const params = new HttpParams().set('ques', question);
-    this.http.get(this.apiRoot, { search: params });
-    // return this.http.get(question);
-    // const promise = new Promise((resolve, reject) => {
-    //   const apiURL = `${this.apiRoot}?ques=${question}`;
-    //   this.httpClient.get(apiURL)
-    //     .toPromise()
-    //     .then(
-    //       res => { // Success
-    //         console.log(res);
-    //         resolve();
-    //       },
-    //       msg => { // Error
-    //         reject(msg);
-    //       }
-    //     );
-    // });
-    // return promise;
+  getAnswerById(id: number): string {
+    if (id > 0 && id <= 3) {
+      return Constants.ANSWERS[0];
+    } else if (id > 3 && id <= 7) {
+      return Constants.ANSWERS[1];
+    } else if (id > 7 && id <= 14) {
+      return Constants.ANSWERS[2];
+    } else if (id > 14 && id <= 20) {
+      return Constants.ANSWERS[3];
+    } else {
+      return '';
+    }
   }
 
   async presentToast(message: string) {
